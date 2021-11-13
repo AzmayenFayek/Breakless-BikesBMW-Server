@@ -53,14 +53,14 @@ client.connect((err) => {
     });
 
     // get myorder
-    app.get("/myOrder", async (req, res) => {
+    app.get("/myOrder/:email", async (req, res) => {
         const result = await OrderCollection.find({ email: req.params.email })
             .toArray();
         res.send(result);
     });
 
     // delete order
-    app.delete("/deleteOrder", async (req, res) => {
+    app.delete("/deleteOrder/:id", async (req, res) => {
         const result = await OrderCollection.deleteOne({
             _id: ObjectId(req.params.id),
         });
