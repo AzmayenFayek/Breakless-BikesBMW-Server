@@ -37,18 +37,27 @@ app.get('/', (req, res) => {
 });
 
 client.connect((err) => {
-    const EventsCollection = client.db("bikes").collection("bike");
+    const ProductsCollection = client.db("bikes").collection("bike");
+    const OrderCollection = client.db("bikes").collection("orders");
 
     // add Bikes
     app.post("/addBikes", async (req, res) => {
-        const result = await EventsCollection.insertOne(req.body);
+        const result = await ProductsCollection.insertOne(req.body);
         res.send(result.insertedId);
     });
+
+    //Order Now (add products details while placing order)
+    app.post("/orderNow", async (req, res) => {
+        const result = await OrderCollection.insertOne(req.body);
+        res.send(result.insertedId);
+    });
+
+
 
     // get all bikes
 
     app.get("/allBikes", async (req, res) => {
-        const result = await EventsCollection.find({}).toArray();
+        const result = await ProductsCollection.find({}).toArray();
         res.send(result);
     });
 
@@ -59,7 +68,7 @@ client.connect((err) => {
         const id = (req.params.id);
 
         const query = { _id: ObjectId(id) };
-        const details = await EventsCollection.findOne(query);
+        const details = await ProductsCollection.findOne(query);
         console.log('user details id:', id);
         res.send(details);
     })
